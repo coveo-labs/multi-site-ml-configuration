@@ -1,0 +1,49 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>A-Brand - Search</title>
+  <meta name="description" content="A-Brand">
+  <meta name="author" content="Coveo">
+  <link rel="stylesheet" href="https://static.cloud.coveo.com/searchui/v2.8521/css/CoveoFullSearch.min.css" />
+  <link rel="stylesheet" href="../style/style.css" />
+  <script class="coveo-script"
+    src="https://static.cloud.coveo.com/searchui/v2.8521/js/CoveoJsSearch.Lazy.min.js"></script>
+  <script src="https://static.cloud.coveo.com/searchui/v2.8521/js/templates/templates.js"></script>
+  <script src="https://static.cloud.coveo.com/searchui/v2.8521/js/cultures/en.js"></script>
+  <script>
+    var originLevel1 = "Site3";
+
+    document.addEventListener('DOMContentLoaded', function () {
+      Coveo.SearchEndpoint.endpoints['default'] = new Coveo.SearchEndpoint({
+        restUri: 'https://platform.cloud.coveo.com/rest/search',
+        accessToken: 'xx594cb1fc-3543-4748-bf1a-95e7476a78f4',
+          "queryStringArguments": {
+            "searchHub": originLevel1
+          }
+        
+    });
+    const searchBoxRoot = document.getElementById("searchbox");
+    Coveo.$$(searchBoxRoot).on("doneBuildingQuery", function(e, args) {
+      args.queryBuilder.searchHub = originLevel1;
+    });
+      Coveo.initSearchbox(searchBoxRoot, "./SearchPageSite1.html");
+    })
+  </script>
+</head>
+
+<body id="search" data-enable-history="true">
+  <h1>Site1 Home</h1>
+  <a href="./GlobalSite1.html">Global Site 1</a>
+  <a href="./GlobalSite2.html">Global Site 2</a>
+  <a href="./SearchPageSite1.html">Site 1</a>
+  <a href="./SearchPageSite2.html">Site 2</a>
+  <a href="./ListingPageSite1.html">Listing Site 1</a>
+  <a href="./ListingPageSite2.html">Listing Site 2</a>
+
+  <div id="searchbox">
+    <div class="CoveoSearchbox"></div>
+  </div>
+  
+</html>

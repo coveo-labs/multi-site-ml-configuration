@@ -98,3 +98,7 @@ The following Query Pipelines must be created:
   * Linked ML Models:
     * Rec_Help
 
+**Result**
+Recommendations:
+* In Site1: No results from Site2, Help should be presented
+* In Site2: No results from Site1, Youtube should be presented
