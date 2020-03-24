@@ -14,17 +14,19 @@
 		<script type="text/javascript" src="https://static.cloud.coveo.com/searchui/v2.7968/js/CoveoJsSearch.Lazy.min.js" class="coveo-script"></script>
 <script type="text/javascript" src="https://static.cloud.coveo.com/searchui/v2.7968/js/templates/templates.js"></script>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/whatwg-fetch@3.0.0/dist/fetch.umd.min.js"></script>
-<script type="text/javascript" src="https://static.cloud.coveo.com/coveo.analytics.js/coveoua.js"></script>
+<script type="text/javascript" src="https://static.cloud.coveo.com/coveo.analytics.js/2.0.1/coveoua.js"></script>
+
       
     <script>
-      var originLevel1 = "Site3";
-      var originLevel1PageView = "Site3";
+      var originLevel1 = "Site5";
+      var originLevel1PageView = "Site5";
 
       function bindList(id,name,type){
         var searchPageRootList1 = document.querySelector(id);
         var listname1 = name;
         Coveo.$$(searchPageRootList1).on("changeAnalyticsCustomData", function(e, args) {
           args.originLevel1 = originLevel1;
+          args.metaObject.c_mywimstest = originLevel1PageView;
           //args.originLevel2 = listname1;
           //Register a pageview when clicking on a result
           if (args.type === 'ClickEvent') {
@@ -40,11 +42,14 @@
             args.documentUrl = args.resultData.uri;
             document.title= args.resultData.title;
             coveoua('init', Coveo.SearchEndpoint.endpoints['default'].accessToken.token);
-            coveoua('send', 'pageview', {
+            coveoua('send', 'view', {
               contentIdKey: meta.contentIDKey,
               contentIdValue: meta.contentIDValue,
               contentType: contentType,
-              originLevel1: originLevel1PageView
+              language: 'en',
+              location: args.resultData.uri,
+              originLevel1: originLevel1PageView,
+              c_mywimstest: originLevel1PageView
             });
           }
         });
@@ -76,7 +81,12 @@
 
   <body>
     <div id="search" class="CoveoSearchInterface" data-enable-history="true">
-      <div class="CoveoAnalytics"></div>
+      <script class="CoveoPipelineContext" type="text/context">
+        {
+          "mySite": "Site5"
+        }
+      </script>
+      <div class="CoveoAnalytics" data-search-hub="Site5"></div>
       <div class="coveo-tab-section">
         <a class="CoveoTab" data-id="All" data-caption="All Content" @source==(Youtube,Site)></a>
         <a class="CoveoTab" data-id="Youtube" data-caption="Youtube" data-expression="@filetype==&quot;youtubevideo&quot;"></a>

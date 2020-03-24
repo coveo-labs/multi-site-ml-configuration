@@ -14,56 +14,51 @@
 		<script type="text/javascript" src="https://static.cloud.coveo.com/searchui/v2.7968/js/CoveoJsSearch.Lazy.min.js" class="coveo-script"></script>
 <script type="text/javascript" src="https://static.cloud.coveo.com/searchui/v2.7968/js/templates/templates.js"></script>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/whatwg-fetch@3.0.0/dist/fetch.umd.min.js"></script>
-<script type="text/javascript" src="https://static.cloud.coveo.com/coveo.analytics.js/2.0.1/coveoua.js"></script>
-
-      
+<script type="text/javascript" src="https://static.cloud.coveo.com/coveo.analytics.js/coveoua.js"></script>
 <script>
-  var originLevel1 = "Site6";
-  var originLevel1PageView = "Site6";
-
+  var originLevel1 = "Site5";
   function bindList(id,name,type){
     var searchPageRootList1 = document.querySelector(id);
     var listname1 = name;
     Coveo.$$(searchPageRootList1).on("changeAnalyticsCustomData", function(e, args) {
       args.originLevel1 = originLevel1;
-      args.metaObject.c_mywimstest = originLevel1PageView;
-      //args.originLevel2 = listname1;
+      args.originLevel2 = listname1;
       //Register a pageview when clicking on a result
       if (args.type === 'ClickEvent') {
-        let source = args.resultData.raw.source;
-        let contentType = 'Youtube';
-        if (source=='Youtube') contentType='Youtube';
-        if (source=='Site') contentType='Website';
-        if (source=='Help') contentType='Help';
-
+        let contentType = type;
         let meta = args.metaObject;
-        args.metaObject.documentURL = args.resultData.uri;
-        args.resultData.clickUri = args.resultData.uri;
-        args.documentUrl = args.resultData.uri;
         document.title= args.resultData.title;
         coveoua('init', Coveo.SearchEndpoint.endpoints['default'].accessToken.token);
-        coveoua('send', 'view', {
+        coveoua('send', 'pageview', {
           contentIdKey: meta.contentIDKey,
           contentIdValue: meta.contentIDValue,
           contentType: contentType,
-          language: 'en',
-          location: args.resultData.uri,
-          originLevel1: originLevel1PageView,
-              c_mywimstest: originLevel1PageView
+          originLevel1: originLevel1PageView
         });
       }
     });
     Coveo.$$(searchPageRootList1).on("doneBuildingQuery", function(e, args) {
       args.queryBuilder.searchHub = originLevel1;
+      args.queryBuilder.tab = listname1;
     });
     Coveo.$$(searchPageRootList1).on('preprocessResults', function(e, args) {
       args.results.results.forEach(function(result) { 
-         result.clickUri = 'javascript:void(0);';
+        result.clickUri = 'javascript:void(0);';
         });
      });
     Coveo.init(searchPageRootList1);
   }
+  function bindRec(id,name,type){
+    var searchPageRootList1 = document.querySelector(id);
+    var listname1 = name;
+    Coveo.$$(searchPageRootList1).on("doneBuildingQuery", function(e, args) {
+      args.queryBuilder.searchHub = originLevel1;
+    });
+    Coveo.initRecommendation(searchPageRootList1, document.getElementById('search'));
+  }
+
     document.addEventListener('DOMContentLoaded', function () {
+        
         Coveo.SearchEndpoint.endpoints['default'] = new Coveo.SearchEndpoint({
             restUri: 'https://platform.cloud.coveo.com/rest/search',
             accessToken: 'xx594cb1fc-3543-4748-bf1a-95e7476a78f4',
@@ -72,8 +67,14 @@
               }
             
         });
+        const addRecommendationPadding =  "{\"maxActionsHistoryItemsToConsider\":0 }";
+        Coveo.SearchEndpoint.endpoints['default'].options.queryStringArguments.mlParameters = addRecommendationPadding;
         bindList('.CoveoSearchInterface','','');
-
+        bindRec('#recommendationYoutube','','');
+        bindRec('#recommendationHelp','','');
+        bindRec('#recommendationWebsite','','');
+    
+        
     })
 </script>
     
@@ -81,16 +82,10 @@
 
   <body>
     <div id="search" class="CoveoSearchInterface" data-enable-history="true">
-      <script class="CoveoPipelineContext" type="text/context">
-        {
-          "mySite": "Site6"
-        }
-      </script>
-
-      <div class="CoveoAnalytics" data-search-hub="Site6"></div>
+      <div class="CoveoAnalytics" data-search-hub="Site5"></div>
       <div class="coveo-tab-section">
-        <a class="CoveoTab" data-id="All" data-caption="All Content" data-expression="@source==(Help,Site)"></a>
-        <a class="CoveoTab" data-id="Help" data-caption="Help" data-expression="@source==Help"></a>
+        <a class="CoveoTab" data-id="All" data-caption="All Content" @source==(Youtube,Site)></a>
+        <a class="CoveoTab" data-id="Youtube" data-caption="Youtube" data-expression="@filetype==&quot;youtubevideo&quot;"></a>
         <a class="CoveoTab" data-id="Website" data-caption="Website" data-expression="@source==Site"></a>
       </div>
       <div class="coveo-search-section">
@@ -248,4 +243,68 @@
         </div>
       </div>
     </div>
+   
+    <div id="recommendationYoutube" class="CoveoRecommendation"
+    data-design="new"
+    data-results-per-page="5" 
+    data-hide-if-no-results="true"
+    data-pipeline="Recommendation_Youtube" 
+    data-main-search-interface="search">
+
+    <div class="CoveoAnalytics" data-search-hub="Site5"></div>
+    <div class="coveo-recommendation-header">
+        <div class="coveo-recommendation-title">Recommendations Youtube</div>
+    </div>
+    
+    <div class="coveo-recommendation-body">
+        <div class="CoveoResultList">
+          <script id="Default" class="result-template" type="text/html" data-layout="list">
+            <span class="CoveoFieldValue" data-field="@source" data-text-caption="Source" style="margin-right:30px;"></span><a class="CoveoResultLink"></a>
+          </script>
+        </div>
+    </div>
+  </div>
+  <div id="recommendationHelp" class="CoveoRecommendation"
+  data-design="new"
+  data-results-per-page="5" 
+  data-hide-if-no-results="true"
+  data-pipeline="Recommendation_Help" 
+  data-main-search-interface="search">
+  <div class="CoveoAnalytics" data-search-hub="Site5"></div>
+
+  <div class="coveo-recommendation-header">
+      <div class="coveo-recommendation-title">Recommendations Help</div>
+  </div>
+  
+  <div class="coveo-recommendation-body">
+      <div class="CoveoResultList">
+        <script id="Default" class="result-template" type="text/html" data-layout="list">
+          <span class="CoveoFieldValue" data-field="@source" data-text-caption="Source" style="margin-right:30px;"></span><a class="CoveoResultLink"></a>
+        </script>
+    </div>
+  </div>
+</div>
+
+  <div id="recommendationWebsite" class="CoveoRecommendation"
+  data-design="new"
+  data-results-per-page="5" 
+  data-hide-if-no-results="true"
+  data-pipeline="Recommendation_Website" 
+  data-main-search-interface="search">
+  <div class="CoveoAnalytics" data-search-hub="Site5"></div>
+ 
+  <div class="coveo-recommendation-header">
+      <div class="coveo-recommendation-title">Recommendations Website</div>
+  </div>
+  
+  <div class="coveo-recommendation-body">
+      <div class="CoveoResultList">
+        <script id="Default" class="result-template" type="text/html" data-layout="list">
+          <span class="CoveoFieldValue" data-field="@source" data-text-caption="Source" style="margin-right:30px;"></span><a class="CoveoResultLink"></a>
+        </script>
+      
+      </div>
+  </div>
+</div>
+
 </body></html>

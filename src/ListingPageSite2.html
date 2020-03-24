@@ -17,7 +17,7 @@
 <script type="text/javascript" src="https://static.cloud.coveo.com/coveo.analytics.js/coveoua.js"></script>
     <script>
       var originLevel1 = "Listings";
-      var originLevel1PageView = "Site3";
+      var originLevel1PageView = "Site6";
       function bindList(id,name,type){
         var searchPageRootList1 = document.querySelector(id);
         var listname1 = name;
@@ -72,7 +72,7 @@
 
   <body>
     <div id="list1" class="CoveoSearchInterface" data-expression = "@source==Help" data-enable-history="true">
-      <div class="CoveoAnalytics"></div>
+      <div class="CoveoAnalytics" data-search-hub="Site6"></div>
         The Best Online help
         <div class="coveo-results-column">
           <div class="CoveoResultList" data-layout="list" data-wait-animation="fade" data-auto-select-fields-to-include="true">
@@ -84,7 +84,7 @@
     </div>
 
     <div id="list2" class="CoveoSearchInterface" data-expression = "@source==Site" data-enable-history="true">
-      <div class="CoveoAnalytics"></div>
+      <div class="CoveoAnalytics" data-search-hub="Site6"></div>
         The Best Sites
         <div class="coveo-results-column">
           <div class="CoveoResultList" data-layout="list" data-wait-animation="fade" data-auto-select-fields-to-include="true">
