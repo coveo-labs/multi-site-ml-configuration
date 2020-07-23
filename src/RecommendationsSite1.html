@@ -67,12 +67,13 @@
               }
             
         });
-        const addRecommendationPadding =  "{\"maxActionsHistoryItemsToConsider\":0 }";
+        const addRecommendationPadding =  "{\"maxActionsHistoryItemsToConsider\":0, \"padding\":\"popular\", \"num\":20 }";
+        //const addRecommendationPadding =  "{\"maxActionsHistoryItemsToConsider\":0 }";
         Coveo.SearchEndpoint.endpoints['default'].options.queryStringArguments.mlParameters = addRecommendationPadding;
         bindList('.CoveoSearchInterface','','');
-        bindRec('#recommendationYoutube','','');
         bindRec('#recommendationHelp','','');
         bindRec('#recommendationWebsite','','');
+        bindRec('#recommendationYoutube','','');
     
         
     })
@@ -81,7 +82,7 @@
   </head>
 
   <body>
-    <div id="search" class="CoveoSearchInterface" data-enable-history="true">
+    <div id="search" class="CoveoSearchInterface" data-enable-history="true" data-auto-trigger-query="true">
       <div class="CoveoAnalytics" data-search-hub="Site5"></div>
       <div class="coveo-tab-section">
         <a class="CoveoTab" data-id="All" data-caption="All Content" @source==(Youtube,Site)></a>
@@ -247,7 +248,7 @@
     <div id="recommendationYoutube" class="CoveoRecommendation"
     data-design="new"
     data-results-per-page="5" 
-    data-hide-if-no-results="true"
+    data-hide-if-no-results="false"
     data-pipeline="Recommendation_Youtube" 
     data-main-search-interface="search">
 
@@ -267,7 +268,7 @@
   <div id="recommendationHelp" class="CoveoRecommendation"
   data-design="new"
   data-results-per-page="5" 
-  data-hide-if-no-results="true"
+  data-hide-if-no-results="false"
   data-pipeline="Recommendation_Help" 
   data-main-search-interface="search">
   <div class="CoveoAnalytics" data-search-hub="Site5"></div>
@@ -288,7 +289,7 @@
   <div id="recommendationWebsite" class="CoveoRecommendation"
   data-design="new"
   data-results-per-page="5" 
-  data-hide-if-no-results="true"
+  data-hide-if-no-results="false"
   data-pipeline="Recommendation_Website" 
   data-main-search-interface="search">
   <div class="CoveoAnalytics" data-search-hub="Site5"></div>
